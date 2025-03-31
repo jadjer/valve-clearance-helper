@@ -3,27 +3,32 @@ package by.jadjer.valveclearanceassistant.ui.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import by.jadjer.valveclearanceassistant.App
+import by.jadjer.valveclearanceassistant.ui.viewmodel.ResultsViewModel
+import by.jadjer.valveclearanceassistant.ui.viewmodel.ResultsViewModelFactory
 
 @Composable
 fun ResultsScreen(
-    intakeShims: List<Float>,
-    exhaustShims: List<Float>,
-    intakeClearances: List<Float>,
-    exhaustClearances: List<Float>,
-    intakeMin: Float,
-    intakeMax: Float,
-    exhaustMin: Float,
-    exhaustMax: Float,
+    app: App,
     onRestart: () -> Unit
 ) {
+    val viewModel: ResultsViewModel = viewModel(factory = ResultsViewModelFactory(app.valveClearanceRepository))
+
+    val intakeShims: List<Float> = listOf(0.15f, 0.16f)
+    val exhaustShims: List<Float> = listOf(0.15f, 0.16f)
+    val intakeClearances: List<Float> = listOf(0.15f, 0.16f)
+    val exhaustClearances: List<Float> = listOf(0.15f, 0.16f)
+    val intakeMin: Float = 0.12f
+    val intakeMax: Float = 0.45f
+    val exhaustMin: Float = 0.45f
+    val exhaustMax: Float = 0.34f
+
     // Здесь должна быть логика расчета оптимальной перестановки шайб
     val (optimizedIntake, optimizedExhaust, newShimsNeeded) = calculateOptimalShims(
         intakeShims, exhaustShims, intakeClearances, exhaustClearances,

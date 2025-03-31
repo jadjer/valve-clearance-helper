@@ -2,24 +2,27 @@ package by.jadjer.valveclearanceassistant.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import by.jadjer.valveclearanceassistant.App
+import by.jadjer.valveclearanceassistant.ui.viewmodel.ShimsInputViewModel
+import by.jadjer.valveclearanceassistant.ui.viewmodel.ShimsInputViewModelFactory
 
 @Composable
 fun ShimsInputScreen(
-    cylinders: Int,
-    intakeValves: Int,
-    exhaustValves: Int,
-    onNext: (List<Float>, List<Float>) -> Unit
+    app: App,
+    onNext: () -> Unit
 ) {
+    val viewModel: ShimsInputViewModel = viewModel(factory = ShimsInputViewModelFactory(app.valveClearanceRepository))
+
+    val cylinders = viewModel.getCylinders()
+    val intakeValves = viewModel.getIntakeValves()
+    val exhaustValves = viewModel.getExhaustValves()
+
     val intakeShims = remember {
         mutableStateListOf<Float>().apply {
             repeat(cylinders * intakeValves) { add(0.0f) }
@@ -64,7 +67,7 @@ fun ShimsInputScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { onNext(intakeShims, exhaustShims) },
+            onClick = { onNext() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Calculate Optimal Configuration")

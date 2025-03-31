@@ -8,13 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import by.jadjer.valveclearanceassistant.ui.navigation.AppNavGraph
+import by.jadjer.valveclearanceassistant.ui.AppNavGraph
 import by.jadjer.valveclearanceassistant.ui.theme.ValveClearanceAssistantTheme
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val app = application as App
 
         enableEdgeToEdge()
 
@@ -24,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    AppNavGraph()
+                    AppNavGraph(app)
                 }
             }
         }

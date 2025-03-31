@@ -10,14 +10,22 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import by.jadjer.valveclearanceassistant.App
+import by.jadjer.valveclearanceassistant.ui.viewmodel.MeasuredClearancesViewModel
+import by.jadjer.valveclearanceassistant.ui.viewmodel.MeasuredClearancesViewModelFactory
 
 @Composable
 fun MeasuredClearancesScreen(
-    cylinders: Int,
-    intakeValves: Int,
-    exhaustValves: Int,
-    onNext: (List<Float>, List<Float>) -> Unit
+    app: App,
+    onNext: () -> Unit
 ) {
+    val viewModel: MeasuredClearancesViewModel = viewModel(factory = MeasuredClearancesViewModelFactory(app.valveClearanceRepository))
+
+    val cylinders = viewModel.getCylinders()
+    val intakeValves = viewModel.getIntakeValves()
+    val exhaustValves = viewModel.getExhaustValves()
+
     val intakeClearances = remember {
         mutableStateListOf<Float>().apply {
             repeat(cylinders * intakeValves) { add(0.0f) }
@@ -62,7 +70,7 @@ fun MeasuredClearancesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { onNext(intakeClearances, exhaustClearances) },
+            onClick = { onNext() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Next")

@@ -7,9 +7,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import by.jadjer.valveclearanceassistant.App
 
 @Composable
-fun WelcomeScreen(onNext: () -> Unit) {
+fun WelcomeScreen(
+    app: App,
+    onNext: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -17,22 +21,13 @@ fun WelcomeScreen(onNext: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Valve Clearance Calculator",
-            style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Center
-        )
+        Text(text = "Valve Clearance Calculator", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
         Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = "This app helps you calculate optimal shim configuration for valve adjustment",
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
+
+        Text(text = "This app helps you calculate optimal shim configuration for valve adjustment", style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center)
+
         Spacer(modifier = Modifier.height(48.dp))
-        Button(
-            onClick = onNext,
-            modifier = Modifier.width(200.dp)
-        ) {
+        Button(onClick = onNext, modifier = Modifier.width(200.dp)) {
             Text("Start")
         }
     }

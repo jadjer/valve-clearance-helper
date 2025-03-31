@@ -2,23 +2,27 @@ package by.jadjer.valveclearanceassistant.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import by.jadjer.valveclearanceassistant.App
+import by.jadjer.valveclearanceassistant.ui.viewmodel.ServiceLimitsViewModel
+import by.jadjer.valveclearanceassistant.ui.viewmodel.ServiceLimitsViewModelFactory
 
 @Composable
 fun ServiceLimitsScreen(
-    onNext: (intakeMin: Float, intakeMax: Float, exhaustMin: Float, exhaustMax: Float) -> Unit
+    app: App,
+    onNext: () -> Unit,
 ) {
-    var intakeMin by remember { mutableFloatStateOf(0.15f) }
-    var intakeMax by remember { mutableFloatStateOf(0.25f) }
-    var exhaustMin by remember { mutableFloatStateOf(0.25f) }
-    var exhaustMax by remember { mutableFloatStateOf(0.35f) }
+    val viewModel: ServiceLimitsViewModel = viewModel(factory = ServiceLimitsViewModelFactory(app.valveClearanceRepository))
+
+    val intakeClearanceMin by viewModel.intakeClearanceMin.collectAsState()
+    val intakeClearanceMax by viewModel.intakeClearanceMax.collectAsState()
+    val exhaustClearanceMin by viewModel.exhaustClearanceMin.collectAsState()
+    val exhaustClearanceMax by viewModel.exhaustClearanceMax.collectAsState()
 
     Column(
         modifier = Modifier
@@ -28,14 +32,14 @@ fun ServiceLimitsScreen(
         Text("Service Limits (mm)", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(24.dp))
 
-        FloatInput(label = "Intake valve min", value = intakeMin, onValueChange = { intakeMin = it })
-        FloatInput(label = "Intake valve max", value = intakeMax, onValueChange = { intakeMax = it })
-        FloatInput(label = "Exhaust valve min", value = exhaustMin, onValueChange = { exhaustMin = it })
-        FloatInput(label = "Exhaust valve max", value = exhaustMax, onValueChange = { exhaustMax = it })
+        FloatInput(label = "Intake valve min", value = intakeClearanceMin, onValueChange = { viewModel.setIntakeClearanceMin(it) })
+        FloatInput(label = "Intake valve max", value = intakeClearanceMax, onValueChange = { viewModel.setIntakeClearanceMax(it) })
+        FloatInput(label = "Exhaust valve min", value = exhaustClearanceMin, onValueChange = { viewModel.setExhaustClearanceMin(it) })
+        FloatInput(label = "Exhaust valve max", value = exhaustClearanceMax, onValueChange = { viewModel.setExhaustClearanceMax(it) })
 
         Spacer(modifier = Modifier.weight(1f))
         Button(
-            onClick = { onNext(intakeMin, intakeMax, exhaustMin, exhaustMax) },
+            onClick = { onNext() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Next")
