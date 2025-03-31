@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
 
 class ResultsViewModel(private val repository: ValveClearanceRepository) : ViewModel() {
+    fun calculate() {
+        repository.solution()
+    }
 }
 
 class ResultsViewModelFactory(private val repository: ValveClearanceRepository) : ViewModelProvider.Factory {

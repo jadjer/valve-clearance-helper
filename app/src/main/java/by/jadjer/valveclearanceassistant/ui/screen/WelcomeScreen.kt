@@ -6,12 +6,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import by.jadjer.valveclearanceassistant.App
 
 @Composable
 fun WelcomeScreen(
-    app: App,
     onNext: () -> Unit
 ) {
     Column(
@@ -28,7 +27,13 @@ fun WelcomeScreen(
 
         Spacer(modifier = Modifier.height(48.dp))
         Button(onClick = onNext, modifier = Modifier.width(200.dp)) {
-            Text("Start")
+            Text(text = "Start")
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WelcomeScreenPreview() {
+    WelcomeScreen {}
 }

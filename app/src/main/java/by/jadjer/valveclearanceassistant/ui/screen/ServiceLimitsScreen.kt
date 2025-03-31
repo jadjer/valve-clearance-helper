@@ -4,20 +4,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import by.jadjer.valveclearanceassistant.App
+import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
 import by.jadjer.valveclearanceassistant.ui.viewmodel.ServiceLimitsViewModel
 import by.jadjer.valveclearanceassistant.ui.viewmodel.ServiceLimitsViewModelFactory
 
 @Composable
 fun ServiceLimitsScreen(
-    app: App,
+    repository: ValveClearanceRepository = ValveClearanceRepository(),
     onNext: () -> Unit,
 ) {
-    val viewModel: ServiceLimitsViewModel = viewModel(factory = ServiceLimitsViewModelFactory(app.valveClearanceRepository))
+    val viewModel: ServiceLimitsViewModel = viewModel(factory = ServiceLimitsViewModelFactory(repository))
 
     val intakeClearanceMin by viewModel.intakeClearanceMin.collectAsState()
     val intakeClearanceMax by viewModel.intakeClearanceMax.collectAsState()
@@ -27,10 +30,12 @@ fun ServiceLimitsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Service Limits (mm)", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(24.dp))
+        Text(text = "Service Limits (mm)", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+        Spacer(modifier = Modifier.weight(1f))
 
         FloatInput(label = "Intake valve min", value = intakeClearanceMin, onValueChange = { viewModel.setIntakeClearanceMin(it) })
         FloatInput(label = "Intake valve max", value = intakeClearanceMax, onValueChange = { viewModel.setIntakeClearanceMax(it) })
@@ -38,10 +43,7 @@ fun ServiceLimitsScreen(
         FloatInput(label = "Exhaust valve max", value = exhaustClearanceMax, onValueChange = { viewModel.setExhaustClearanceMax(it) })
 
         Spacer(modifier = Modifier.weight(1f))
-        Button(
-            onClick = { onNext() },
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
             Text("Next")
         }
     }
@@ -63,4 +65,10 @@ fun FloatInput(label: String, value: Float, onValueChange: (Float) -> Unit) {
             modifier = Modifier.fillMaxWidth()
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ServiceLimitsScreenPreview() {
+    ServiceLimitsScreen {}
 }

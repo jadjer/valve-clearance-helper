@@ -9,18 +9,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import by.jadjer.valveclearanceassistant.App
+import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
 import by.jadjer.valveclearanceassistant.ui.viewmodel.EngineParamsViewModel
 import by.jadjer.valveclearanceassistant.ui.viewmodel.EngineParamsViewModelFactory
 
 @Composable
 fun EngineParamsScreen(
-    app: App,
+    repository: ValveClearanceRepository = ValveClearanceRepository(),
     onNext: () -> Unit,
 ) {
-    val viewModel: EngineParamsViewModel = viewModel(factory = EngineParamsViewModelFactory(app.valveClearanceRepository))
+    val viewModel: EngineParamsViewModel = viewModel(
+        factory = EngineParamsViewModelFactory(repository),
+    )
 
     val cylinders by viewModel.cylinders.collectAsState()
     val intakeValves by viewModel.intakeValves.collectAsState()
@@ -34,13 +37,16 @@ fun EngineParamsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Engine Parameters", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
-        NumberInput(label = "Number of cylinders", value = cylinders, onValueChange = { viewModel.setCylinders(it) }, range = 1..12)
-        NumberInput(label = "Intake valves per cylinder", value = intakeValves, onValueChange = { viewModel.setIntakeValves(it) }, range = 1..4)
-        NumberInput(label = "Exhaust valves per cylinder", value = exhaustValves, onValueChange = { viewModel.setExhaustValves(it) }, range = 1..4)
-        Spacer(modifier = Modifier.height(48.dp))
-        Button(onClick = { onNext() }, modifier = Modifier.width(200.dp)) {
+        Column {
+            NumberInput(label = "Number of cylinders", value = cylinders, onValueChange = { viewModel.setCylinders(it) }, range = 1..12)
+            NumberInput(label = "Intake valves per cylinder", value = intakeValves, onValueChange = { viewModel.setIntakeValves(it) }, range = 1..4)
+            NumberInput(label = "Exhaust valves per cylinder", value = exhaustValves, onValueChange = { viewModel.setExhaustValves(it) }, range = 1..4)
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+        Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
             Text("Next")
         }
     }
@@ -60,4 +66,10 @@ fun NumberInput(label: String, value: Int, onValueChange: (Int) -> Unit, range: 
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EngineParamsScreenPreview() {
+    EngineParamsScreen {}
 }

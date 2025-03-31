@@ -5,20 +5,22 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import by.jadjer.valveclearanceassistant.App
+import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
 import by.jadjer.valveclearanceassistant.ui.viewmodel.ResultsViewModel
 import by.jadjer.valveclearanceassistant.ui.viewmodel.ResultsViewModelFactory
 
 @Composable
 fun ResultsScreen(
-    app: App,
+    repository: ValveClearanceRepository = ValveClearanceRepository(),
     onRestart: () -> Unit
 ) {
-    val viewModel: ResultsViewModel = viewModel(factory = ResultsViewModelFactory(app.valveClearanceRepository))
+    val viewModel: ResultsViewModel = viewModel(factory = ResultsViewModelFactory(repository))
 
     val intakeShims: List<Float> = listOf(0.15f, 0.16f)
     val exhaustShims: List<Float> = listOf(0.15f, 0.16f)
@@ -35,14 +37,18 @@ fun ResultsScreen(
         intakeMin, intakeMax, exhaustMin, exhaustMax
     )
 
+    viewModel.calculate()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Optimal Shim Configuration", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         Text("Intake Valves:", style = MaterialTheme.typography.headlineMedium)
         optimizedIntake.forEachIndexed { index, shim ->
@@ -64,10 +70,7 @@ fun ResultsScreen(
         }
 
         Spacer(modifier = Modifier.weight(1f))
-        Button(
-            onClick = onRestart,
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        Button(onClick = onRestart, modifier = Modifier.fillMaxWidth()) {
             Text("Start New Calculation")
         }
     }
@@ -86,4 +89,10 @@ fun calculateOptimalShims(
 ): Triple<List<Float>, List<Float>, List<Float>> {
     // Здесь должна быть реальная логика расчета
     return Triple(intakeShims, exhaustShims, emptyList())
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ResultsScreenPreview() {
+    ResultsScreen {}
 }

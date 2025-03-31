@@ -13,6 +13,7 @@ import by.jadjer.valveclearanceassistant.ui.screen.WelcomeScreen
 @Composable
 fun AppNavGraph(app: App) {
     val navController = rememberNavController()
+    val repository = app.valveClearanceRepository
 
     NavHost(
         navController = navController,
@@ -21,7 +22,6 @@ fun AppNavGraph(app: App) {
         // 1. Экран приветствия
         composable("welcome") {
             WelcomeScreen(
-                app = app,
                 onNext = { navController.navigate("engineParams") }
             )
         }
@@ -29,7 +29,7 @@ fun AppNavGraph(app: App) {
         // 2. Экран параметров двигателя
         composable("engineParams") {
             EngineParamsScreen(
-                app = app,
+                repository = repository,
                 onNext = { navController.navigate("serviceLimits") }
             )
         }
@@ -37,7 +37,7 @@ fun AppNavGraph(app: App) {
         // 3. Экран сервисных лимитов
         composable("serviceLimits") {
             ServiceLimitsScreen(
-                app = app,
+                repository = repository,
                 onNext = { navController.navigate("measuredClearances") }
             )
         }
@@ -45,7 +45,7 @@ fun AppNavGraph(app: App) {
         // 4. Экран ввода измеренных зазоров
         composable("measuredClearances") {
             MeasuredClearancesScreen(
-                app = app,
+                repository = repository,
                 onNext = { navController.navigate("shimsInput") }
             )
         }
@@ -53,7 +53,7 @@ fun AppNavGraph(app: App) {
         // 5. Экран ввода текущих шайб
         composable("shimsInput") {
             ShimsInputScreen(
-                app = app,
+                repository = repository,
                 onNext = { navController.navigate("results") }
             )
         }
@@ -61,7 +61,7 @@ fun AppNavGraph(app: App) {
         // 6. Экран результатов
         composable("results") {
             ResultsScreen(
-                app = app,
+                repository = repository,
                 onRestart = { navController.popBackStack("welcome", inclusive = false) }
             )
         }
