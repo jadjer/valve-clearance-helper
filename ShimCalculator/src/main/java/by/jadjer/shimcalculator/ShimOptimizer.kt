@@ -1,77 +1,79 @@
 package by.jadjer.shimcalculator
 
-import by.jadjer.shimcalculator.models.AdjustmentSolution
+import by.jadjer.shimcalculator.models.ActionType
+import by.jadjer.shimcalculator.models.Instruction
 import by.jadjer.shimcalculator.models.Shim
-import by.jadjer.shimcalculator.models.ValveMeasurement
+import by.jadjer.shimcalculator.models.ValveForAdjustment
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 class ShimOptimizer {
 
-    fun findBestSolutions(
-        requiredChanges: Map<ValveMeasurement, Float>,
-        allMeasurements: List<ValveMeasurement>,
-        availableShims: List<Shim>
-    ): List<AdjustmentSolution> {
-        val solutions = mutableListOf<AdjustmentSolution>()
+    fun adjustValves(valves: List<ValveForAdjustment>): List<Instruction> {
+        val instructions = mutableListOf<Instruction>()
 
-        // 1. Попробовать найти решение с перестановкой существующих шайб
-        findSwapSolutions(requiredChanges, allMeasurements, solutions)
+        val availableShims: MutableMap<Int, Shim> = valves.associate {
+            it.measurement.valveNumber to it.measurement.shim
+        }.toMutableMap()
 
-        // 2. Решения с минимальным количеством новых шайб
-        findMinimalNewShimSolutions(requiredChanges, availableShims, solutions)
+        valves.forEach { valve ->
+            val currentValveNumber = valve.measurement.valveNumber
+            val currentClearance = valve.measurement.clearance
+            val currentShim = valve.measurement.shim
+            val targetShimSize = valve.getTargetShimSize().roundTo0025()
 
-        // 3. Полные решения с новыми шайбами
-        findCompleteNewShimSolutions(requiredChanges, availableShims, solutions)
+            val (bestSourceValve, bestShim) = availableShims
+                .minBy { (_, shim) -> abs(shim.size - targetShimSize) }
 
-        return solutions.sortedBy { it.totalCost }
-    }
+            val resultClearance = calculateNewClearance(currentClearance, currentShim.size, bestShim.size)
 
-    private fun findSwapSolutions(
-        requiredChanges: Map<ValveMeasurement, Float>,
-        allMeasurements: List<ValveMeasurement>,
-        solutions: MutableList<AdjustmentSolution>
-    ) {
-        // Реализация алгоритма поиска перестановок
-        // ...
-    }
-
-    private fun findMinimalNewShimSolutions(
-        requiredChanges: Map<ValveMeasurement, Float>,
-        availableShims: List<Shim>,
-        solutions: MutableList<AdjustmentSolution>
-    ) {
-        // Реализация алгоритма с минимальным количеством новых шайб
-        // ...
-    }
-
-    private fun findCompleteNewShimSolutions(
-        requiredChanges: Map<ValveMeasurement, Float>,
-        availableShims: List<Shim>,
-        solutions: MutableList<AdjustmentSolution>
-    ) {
-        requiredChanges.forEach { (valve, requiredSize) ->
-            val closestShim = findClosestShim(requiredSize, availableShims)
-            if (closestShim != null) {
-                solutions.add(
-                    AdjustmentSolution(
-                        id = "new-shim-${valve.valveNumber}",
-                        requiredShims = listOf(closestShim),
-                        swaps = emptyList(),
-                        totalCost = calculateShimCost(closestShim)
+            if (resultClearance !in valve.getMinClearance()..valve.getMaxClearance()) {
+                instructions.add(
+                    Instruction(
+                        valve = valve,
+                        action = ActionType.REPLACE,
+                        newShim = Shim(currentValveNumber, targetShimSize),
+                        newClearance = calculateNewClearance(currentClearance, currentShim.size, targetShimSize)
                     )
                 )
+                return@forEach
+            }
+
+            when {
+                (bestSourceValve == currentValveNumber) -> {
+                    instructions.add(
+                        Instruction(
+                            valve = valve,
+                            action = ActionType.KEEP,
+                            newShim = currentShim,
+                            newClearance = calculateNewClearance(currentClearance, currentShim.size, currentShim.size)
+                        )
+                    )
+                    availableShims.remove(bestSourceValve)
+                }
+
+                else -> {
+                    instructions.add(
+                        Instruction(
+                            valve = valve,
+                            action = ActionType.MOVE,
+                            newShim = bestShim,
+                            newClearance = calculateNewClearance(currentClearance, currentShim.size, bestShim.size)
+                        )
+                    )
+                    availableShims.remove(bestSourceValve)
+                }
             }
         }
+
+        return instructions
     }
 
-    private fun findClosestShim(
-        requiredSize: Float,
-        shims: List<Shim>
-    ): Shim? {
-        return shims.minByOrNull { abs(it.size - requiredSize) }
+    private fun Float.roundTo0025(): Float {
+        return (this * 40).roundToInt() / 40f
     }
 
-    private fun calculateShimCost(shim: Shim): Float {
-        return if (shim.isInstalled) 0f else shim.size * 10f // Примерная формула стоимости
+    private fun calculateNewClearance(currentClearance: Float, currentShimSize: Float, newShimSize: Float): Float {
+        return currentClearance + (currentShimSize - newShimSize)
     }
 }

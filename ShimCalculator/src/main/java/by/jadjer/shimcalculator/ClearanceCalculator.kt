@@ -1,84 +1,53 @@
 package by.jadjer.shimcalculator
 
 import by.jadjer.shimcalculator.exceptions.ClearanceException
-import by.jadjer.shimcalculator.models.AdjustmentSolution
-import by.jadjer.shimcalculator.models.Shim
+import by.jadjer.shimcalculator.models.Instruction
+import by.jadjer.shimcalculator.models.ValveForAdjustment
 import by.jadjer.shimcalculator.models.ValveMeasurement
 import by.jadjer.shimcalculator.models.ValveSpecification
 import by.jadjer.shimcalculator.models.ValveType
 
 class ClearanceCalculator {
 
-    fun calculateSolutions(
-        measurements: List<ValveMeasurement>,
-        specs: ValveSpecification,
-        availableShims: List<Shim>
-    ): List<AdjustmentSolution> {
-        validateInput(measurements, specs, availableShims)
+    fun calculateSolutions(valveMeasurements: List<ValveMeasurement>, valveSpecification: ValveSpecification): List<Instruction> {
+        validateInput(valveMeasurements, valveSpecification)
 
-        val valvesToAdjust = filterValvesNeedingAdjustment(measurements, specs)
-        val requiredChanges = calculateRequiredShimChanges(valvesToAdjust, specs)
+        val valves: List<ValveForAdjustment> = getValvesForAdjustment(valveMeasurements, valveSpecification)
 
-        return findOptimalSolutions(
-            requiredChanges = requiredChanges,
-            allMeasurements = measurements,
-            availableShims = availableShims
-        )
+        return findOptimalSolutions(valves)
     }
 
-    private fun validateInput(
-        measurements: List<ValveMeasurement>,
-        specs: ValveSpecification,
-        shims: List<Shim>
-    ) {
-        if (measurements.isEmpty()) throw ClearanceException("No measurements provided")
-        if (shims.isEmpty()) throw ClearanceException("No shims available")
-    }
+    private fun validateInput(valveMeasurements: List<ValveMeasurement>, valveSpecification: ValveSpecification) {
+        require(valveMeasurements.isNotEmpty()) { throw ClearanceException("No measurements provided") }
 
-    private fun filterValvesNeedingAdjustment(
-        measurements: List<ValveMeasurement>,
-        specs: ValveSpecification
-    ): List<ValveMeasurement> {
-        return measurements.filter { measurement ->
-            val (min, max) = when (measurement.valveType) {
-                ValveType.INTAKE -> specs.intakeMin to specs.intakeMax
-                ValveType.EXHAUST -> specs.exhaustMin to specs.exhaustMax
-            }
-            measurement.currentClearance < min || measurement.currentClearance > max
+        valveMeasurements.forEach { measurement ->
+            require(measurement.clearance >= 0) { throw ClearanceException("Wrong clearance") }
+            require(measurement.shim.size >= 0) { throw ClearanceException("Wrong shim size") }
+        }
+
+        with(valveSpecification) {
+            require(intakeMin >= 0 && intakeMax >= 0 && intakeMin <= intakeMax) { throw ClearanceException("Wrong intake specification") }
+            require(exhaustMin >= 0 && exhaustMax >= 0 && exhaustMin <= exhaustMax) { throw ClearanceException("Wrong exhaust specification") }
         }
     }
 
-    private fun calculateRequiredShimChanges(
-        valves: List<ValveMeasurement>,
-        specs: ValveSpecification
-    ): Map<ValveMeasurement, Float> {
-        return valves.associateWith { valve ->
-            val target = when (valve.valveType) {
-                ValveType.INTAKE -> (specs.intakeMin + specs.intakeMax) / 2f
-                ValveType.EXHAUST -> (specs.exhaustMin + specs.exhaustMax) / 2f
+    private fun getValvesForAdjustment(valveMeasurements: List<ValveMeasurement>, valveSpecification: ValveSpecification): List<ValveForAdjustment> {
+        return valveMeasurements.map { valveMeasurement ->
+            val valveTargetClearance = when (valveMeasurement.valveType) {
+                ValveType.INTAKE -> (valveSpecification.intakeMin + valveSpecification.intakeMax) / 2f
+                ValveType.EXHAUST -> (valveSpecification.exhaustMin + valveSpecification.exhaustMax) / 2f
             }
-            calculateNewShimSize(
-                currentClearance = valve.currentClearance,
-                targetClearance = target,
-                currentShimSize = valve.currentShimSize
+
+            ValveForAdjustment(
+                measurement = valveMeasurement,
+                specification = valveSpecification,
+                targetClearance = valveTargetClearance,
             )
         }
     }
 
-    private fun calculateNewShimSize(
-        currentClearance: Float,
-        targetClearance: Float,
-        currentShimSize: Float
-    ): Float {
-        return currentShimSize + (currentClearance - targetClearance)
-    }
-
-    private fun findOptimalSolutions(
-        requiredChanges: Map<ValveMeasurement, Float>,
-        allMeasurements: List<ValveMeasurement>,
-        availableShims: List<Shim>
-    ): List<AdjustmentSolution> {
+    private fun findOptimalSolutions(valves: List<ValveForAdjustment>): List<Instruction> {
         val optimizer = ShimOptimizer()
-        return optimizer.findBestSolutions(requiredChanges, allMeasurements, availableShims)
+        return optimizer.adjustValves(valves)
     }
 }

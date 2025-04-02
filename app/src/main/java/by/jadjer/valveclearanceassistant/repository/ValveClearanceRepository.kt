@@ -1,7 +1,6 @@
 package by.jadjer.valveclearanceassistant.repository
 
 import by.jadjer.shimcalculator.ClearanceCalculator
-import by.jadjer.shimcalculator.models.Shim
 import by.jadjer.shimcalculator.models.ValveMeasurement
 import by.jadjer.shimcalculator.models.ValveSpecification
 import by.jadjer.shimcalculator.models.ValveType
