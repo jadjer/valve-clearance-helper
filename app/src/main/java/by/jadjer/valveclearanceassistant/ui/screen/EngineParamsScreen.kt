@@ -2,8 +2,6 @@ package by.jadjer.valveclearanceassistant.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
+import by.jadjer.valveclearanceassistant.ui.component.NumberInput
 import by.jadjer.valveclearanceassistant.ui.viewmodel.EngineParamsViewModel
 import by.jadjer.valveclearanceassistant.ui.viewmodel.EngineParamsViewModelFactory
 
@@ -28,6 +27,12 @@ fun EngineParamsScreen(
     val cylinders by viewModel.cylinders.collectAsState()
     val intakeValves by viewModel.intakeValves.collectAsState()
     val exhaustValves by viewModel.exhaustValves.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.setCylinders(cylinders)
+        viewModel.setIntakeValves(intakeValves)
+        viewModel.setExhaustValves(exhaustValves)
+    }
 
     Column(
         modifier = Modifier
@@ -48,22 +53,6 @@ fun EngineParamsScreen(
         Spacer(modifier = Modifier.weight(1f))
         Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
             Text("Next")
-        }
-    }
-}
-
-@Composable
-fun NumberInput(label: String, value: Int, onValueChange: (Int) -> Unit, range: IntRange) {
-    Column(modifier = Modifier.padding(vertical = 8.dp)) {
-        Text(text = label, style = MaterialTheme.typography.bodyMedium)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { if (value > range.first) onValueChange(value - 1) }) {
-                Icon(Icons.Default.Delete, contentDescription = "Decrease")
-            }
-            Text(text = value.toString(), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(horizontal = 16.dp))
-            IconButton(onClick = { if (value < range.last) onValueChange(value + 1) }) {
-                Icon(Icons.Default.Add, contentDescription = "Increase")
-            }
         }
     }
 }

@@ -21,13 +21,13 @@ class ClearanceCalculator {
         require(valveMeasurements.isNotEmpty()) { throw ClearanceException("No measurements provided") }
 
         valveMeasurements.forEach { measurement ->
-            require(measurement.clearance >= 0) { throw ClearanceException("Wrong clearance") }
-            require(measurement.shim.size >= 0) { throw ClearanceException("Wrong shim size") }
+            require(measurement.clearance > 0) { throw ClearanceException("Wrong clearance") }
+            require(measurement.shim.size > 0) { throw ClearanceException("Wrong shim size") }
         }
 
         with(valveSpecification) {
-            require(intakeMin >= 0 && intakeMax >= 0 && intakeMin <= intakeMax) { throw ClearanceException("Wrong intake specification") }
-            require(exhaustMin >= 0 && exhaustMax >= 0 && exhaustMin <= exhaustMax) { throw ClearanceException("Wrong exhaust specification") }
+            require(intakeMin > 0 && intakeMax > 0 && intakeMin <= intakeMax) { throw ClearanceException("Wrong intake specification") }
+            require(exhaustMin > 0 && exhaustMax > 0 && exhaustMin <= exhaustMax) { throw ClearanceException("Wrong exhaust specification") }
         }
     }
 

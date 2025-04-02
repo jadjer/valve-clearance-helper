@@ -4,10 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.*
 import by.jadjer.valveclearanceassistant.App
 import by.jadjer.valveclearanceassistant.ui.screen.EngineParamsScreen
-import by.jadjer.valveclearanceassistant.ui.screen.MeasuredClearancesScreen
+import by.jadjer.valveclearanceassistant.ui.screen.MeasurementsScreen
 import by.jadjer.valveclearanceassistant.ui.screen.ResultsScreen
 import by.jadjer.valveclearanceassistant.ui.screen.ServiceLimitsScreen
-import by.jadjer.valveclearanceassistant.ui.screen.ShimsInputScreen
 import by.jadjer.valveclearanceassistant.ui.screen.WelcomeScreen
 
 @Composable
@@ -44,15 +43,7 @@ fun AppNavGraph(app: App) {
 
         // 4. Экран ввода измеренных зазоров
         composable("measuredClearances") {
-            MeasuredClearancesScreen(
-                repository = repository,
-                onNext = { navController.navigate("shimsInput") }
-            )
-        }
-
-        // 5. Экран ввода текущих шайб
-        composable("shimsInput") {
-            ShimsInputScreen(
+            MeasurementsScreen(
                 repository = repository,
                 onNext = { navController.navigate("results") }
             )

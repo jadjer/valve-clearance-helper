@@ -1,17 +1,16 @@
 package by.jadjer.valveclearanceassistant.ui.screen
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
+import by.jadjer.valveclearanceassistant.ui.component.FloatInput
 import by.jadjer.valveclearanceassistant.ui.viewmodel.ServiceLimitsViewModel
 import by.jadjer.valveclearanceassistant.ui.viewmodel.ServiceLimitsViewModelFactory
 
@@ -26,6 +25,13 @@ fun ServiceLimitsScreen(
     val intakeClearanceMax by viewModel.intakeClearanceMax.collectAsState()
     val exhaustClearanceMin by viewModel.exhaustClearanceMin.collectAsState()
     val exhaustClearanceMax by viewModel.exhaustClearanceMax.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.setIntakeClearanceMin(intakeClearanceMin)
+        viewModel.setIntakeClearanceMax(intakeClearanceMax)
+        viewModel.setExhaustClearanceMin(exhaustClearanceMin)
+        viewModel.setExhaustClearanceMax(exhaustClearanceMax)
+    }
 
     Column(
         modifier = Modifier
@@ -46,24 +52,6 @@ fun ServiceLimitsScreen(
         Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
             Text("Next")
         }
-    }
-}
-
-@Composable
-fun FloatInput(label: String, value: Float, onValueChange: (Float) -> Unit) {
-    var textValue by remember { mutableStateOf(value.toString()) }
-
-    Column(modifier = Modifier.padding(vertical = 8.dp)) {
-        Text(label, style = MaterialTheme.typography.bodyMedium)
-        OutlinedTextField(
-            value = textValue,
-            onValueChange = {
-                textValue = it
-                it.toFloatOrNull()?.let { float -> onValueChange(float) }
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 
