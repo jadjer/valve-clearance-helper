@@ -56,11 +56,6 @@ fun ResultsScreen(
                 Spacer(modifier = Modifier.weight(1f))
 
                 InstructionList(instructions = state.instructions)
-
-//                Spacer(modifier = Modifier.weight(1f))
-//                Button(onClick = onRestart, modifier = Modifier.fillMaxWidth()) {
-//                    Text("Restart")
-//                }
             }
         }
     }
@@ -125,9 +120,6 @@ fun ErrorScreen(message: String) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = message)
-            Button(onClick = { /* Повторная загрузка */ }) {
-                Text("Повторить")
-            }
         }
     }
 }

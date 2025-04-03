@@ -53,4 +53,3 @@ fun FloatInput(
 fun FloatInputPreview() {
     FloatInput(label = "Test", value = 123f, onValueChange = {})
 }
-

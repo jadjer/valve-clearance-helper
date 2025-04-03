@@ -6,81 +6,66 @@ import by.jadjer.shimcalculator.models.Shim
 import by.jadjer.shimcalculator.models.ValveMeasurement
 import by.jadjer.shimcalculator.models.ValveSpecification
 import by.jadjer.shimcalculator.models.ValveType
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 
 class ValveClearanceRepository {
 
-    private val _measurements = MutableStateFlow<List<ValveMeasurement>>(emptyList())
-    val measurements: StateFlow<List<ValveMeasurement>> = _measurements
+    private var _cylinders: Int = 1
+    private var _intakeValves: Int = 1
+    private var _exhaustValves: Int = 1
+    private var _measurements: List<ValveMeasurement> = emptyList()
+    private var _specification: ValveSpecification = ValveSpecification(0f, 0f, 0f, 0f)
 
-    private var specification = ValveSpecification(0f, 0f, 0f, 0f)
+    val cylinders: Int get() = _cylinders
+    val intakeValves: Int get() = _intakeValves
+    val exhaustValves: Int get() = _exhaustValves
+    val measurements: List<ValveMeasurement> get() = _measurements
+    val specification: ValveSpecification get() = _specification
 
     fun setEngineData(cylinders: Int, intakeValves: Int, exhaustValves: Int) {
-        println("Cylinders: $cylinders, in: $intakeValves, ex: $exhaustValves")
+        val needsReset = _cylinders != cylinders ||
+                _intakeValves != intakeValves ||
+                _exhaustValves != exhaustValves ||
+                _measurements.isEmpty()
 
-        var itemIndex = 0
+        if (needsReset) {
+            _cylinders = cylinders
+            _intakeValves = intakeValves
+            _exhaustValves = exhaustValves
 
-        val initialIntakeValves = List(cylinders * intakeValves) { index ->
-            ValveMeasurement(
-                valveNumber = ++itemIndex,
-                valveType = ValveType.INTAKE,
-                clearance = 0f,
-                shim = Shim(
-                    valveNumber = itemIndex,
-                    size = 0f,
-                )
-            )
+            resetMeasurements()
         }
-
-        val initialExhaustValves = List(cylinders * exhaustValves) { index ->
-            ValveMeasurement(
-                valveNumber = ++itemIndex,
-                valveType = ValveType.EXHAUST,
-                clearance = 0f,
-                shim = Shim(
-                    valveNumber = itemIndex,
-                    size = 0f,
-                )
-            )
-        }
-
-        _measurements.update {
-            initialIntakeValves + initialExhaustValves
-        }
-
-        println("Meas size: ${_measurements.value.size}")
     }
 
     fun setClearanceLimit(intakeMin: Float, intakeMax: Float, exhaustMin: Float, exhaustMax: Float) {
-        specification = ValveSpecification(
-            intakeMin = intakeMin,
-            intakeMax = intakeMax,
-            exhaustMin = exhaustMin,
-            exhaustMax = exhaustMax,
-        )
-        println("in: $intakeMin..$intakeMax, ex: $exhaustMin..$exhaustMax")
+        _specification = ValveSpecification(intakeMin, intakeMax, exhaustMin, exhaustMax)
     }
 
-    fun addMeasuredValve(valveIndex: Int, valveType: ValveType, clearance: Float, shim: Float) {
-        _measurements.update { currentList ->
-            currentList + ValveMeasurement(
-                valveNumber = valveIndex,
-                valveType = valveType,
-                clearance = clearance,
-                shim = Shim(
-                    valveNumber = valveIndex,
-                    size = shim,
-                )
-            )
+    fun updateMeasuredValue(valveNumber: Int, clearance: Float, shim: Float) {
+        _measurements.firstOrNull { it.valveNumber == valveNumber }?.let { measurement ->
+            measurement.clearance = clearance
+            measurement.shim.size = shim
         }
     }
 
     fun getAdjustedValves(): List<Instruction> {
         val calculator = ClearanceCalculator()
-        val instructions = calculator.calculateSolutions(measurements.value, specification)
+        val instructions = calculator.calculateSolutions(_measurements, _specification)
 
         return instructions
+    }
+
+    private fun resetMeasurements() {
+        var counter = 0
+
+        fun createValves(type: ValveType, count: Int) = List(count) {
+            ValveMeasurement(
+                valveNumber = ++counter,
+                valveType = type,
+                clearance = 0f,
+                shim = Shim(valveNumber = counter, size = 0f)
+            )
+        }
+
+        _measurements = createValves(ValveType.INTAKE, cylinders * intakeValves) + createValves(ValveType.EXHAUST, cylinders * exhaustValves)
     }
 }

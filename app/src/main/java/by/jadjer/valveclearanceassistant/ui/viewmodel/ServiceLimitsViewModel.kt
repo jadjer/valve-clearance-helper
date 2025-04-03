@@ -8,10 +8,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ServiceLimitsViewModel(private val repository: ValveClearanceRepository) : ViewModel() {
-    private val _intakeClearanceMin = MutableStateFlow<Float>(0.13f)
-    private val _intakeClearanceMax = MutableStateFlow<Float>(0.19f)
-    private val _exhaustClearanceMin = MutableStateFlow<Float>(0.28f)
-    private val _exhaustClearanceMax = MutableStateFlow<Float>(0.34f)
+
+    private val _intakeClearanceMin = MutableStateFlow<Float>(repository.specification.intakeMin)
+    private val _intakeClearanceMax = MutableStateFlow<Float>(repository.specification.intakeMax)
+    private val _exhaustClearanceMin = MutableStateFlow<Float>(repository.specification.exhaustMin)
+    private val _exhaustClearanceMax = MutableStateFlow<Float>(repository.specification.exhaustMax)
 
     val intakeClearanceMin: StateFlow<Float> = _intakeClearanceMin.asStateFlow()
     val intakeClearanceMax: StateFlow<Float> = _intakeClearanceMax.asStateFlow()
@@ -20,46 +21,39 @@ class ServiceLimitsViewModel(private val repository: ValveClearanceRepository) :
 
     fun setIntakeClearanceMin(value: Float) {
         _intakeClearanceMin.value = value
-
-        repository.setClearanceLimit(
-            _intakeClearanceMin.value,
-            _intakeClearanceMax.value,
-            _exhaustClearanceMin.value,
-            _exhaustClearanceMax.value,
-        )
     }
 
     fun setIntakeClearanceMax(value: Float) {
         _intakeClearanceMax.value = value
-
-        repository.setClearanceLimit(
-            _intakeClearanceMin.value,
-            _intakeClearanceMax.value,
-            _exhaustClearanceMin.value,
-            _exhaustClearanceMax.value,
-        )
     }
 
     fun setExhaustClearanceMin(value: Float) {
         _exhaustClearanceMin.value = value
-
-        repository.setClearanceLimit(
-            _intakeClearanceMin.value,
-            _intakeClearanceMax.value,
-            _exhaustClearanceMin.value,
-            _exhaustClearanceMax.value,
-        )
     }
 
     fun setExhaustClearanceMax(value: Float) {
         _exhaustClearanceMax.value = value
+    }
 
+    fun isValid(): Boolean {
+        val clearances = listOf(
+            _intakeClearanceMin.value,
+            _intakeClearanceMax.value,
+            _exhaustClearanceMin.value,
+            _exhaustClearanceMax.value
+        )
+        return clearances.all { it > 0 }
+    }
+
+    fun saveData() : Boolean {
         repository.setClearanceLimit(
             _intakeClearanceMin.value,
             _intakeClearanceMax.value,
             _exhaustClearanceMin.value,
             _exhaustClearanceMax.value,
         )
+
+        return true
     }
 }
 

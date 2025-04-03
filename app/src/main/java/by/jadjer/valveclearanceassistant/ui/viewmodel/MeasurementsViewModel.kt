@@ -1,22 +1,34 @@
 package by.jadjer.valveclearanceassistant.ui.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import by.jadjer.shimcalculator.models.ValveMeasurement
-import by.jadjer.shimcalculator.models.ValveType
 import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
-import kotlinx.coroutines.flow.StateFlow
 
 class MeasurementsViewModel(private val repository: ValveClearanceRepository) : ViewModel() {
-    val measurements: StateFlow<List<ValveMeasurement>> = repository.measurements
 
-    fun addMeasuredValve(valveIndex: Int, valveType: ValveType, clearance: Float, shim: Float) {
-        repository.addMeasuredValve(
-            valveIndex = valveIndex,
-            valveType = valveType,
-            clearance = clearance,
-            shim = shim,
-        )
+    private val _measurements = mutableStateListOf<ValveMeasurement>()
+    val measurements: List<ValveMeasurement> get() = _measurements
+
+    init {
+        loadMeasurements()
+    }
+
+    fun updateMeasuredValue(valveNumber: Int, clearance: Float, shim: Float) {
+        repository.updateMeasuredValue(valveNumber, clearance, shim)
+        loadMeasurements()
+    }
+
+    fun isValid(): Boolean {
+        return _measurements.all { measurement ->
+            measurement.clearance > 0 && measurement.shim.size > 0
+        }
+    }
+
+    private fun loadMeasurements() {
+        _measurements.clear()
+        _measurements.addAll(repository.measurements)
     }
 }
 

@@ -26,13 +26,6 @@ fun ServiceLimitsScreen(
     val exhaustClearanceMin by viewModel.exhaustClearanceMin.collectAsState()
     val exhaustClearanceMax by viewModel.exhaustClearanceMax.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.setIntakeClearanceMin(intakeClearanceMin)
-        viewModel.setIntakeClearanceMax(intakeClearanceMax)
-        viewModel.setExhaustClearanceMin(exhaustClearanceMin)
-        viewModel.setExhaustClearanceMax(exhaustClearanceMax)
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -49,7 +42,11 @@ fun ServiceLimitsScreen(
         FloatInput(label = "Exhaust valve max", value = exhaustClearanceMax, onValueChange = { viewModel.setExhaustClearanceMax(it) })
 
         Spacer(modifier = Modifier.weight(1f))
-        Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = {
+            if (viewModel.saveData()) {
+                onNext()
+            }
+        }, modifier = Modifier.fillMaxWidth(), enabled = viewModel.isValid()) {
             Text("Next")
         }
     }

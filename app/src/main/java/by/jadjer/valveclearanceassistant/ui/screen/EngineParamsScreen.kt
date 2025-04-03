@@ -28,12 +28,6 @@ fun EngineParamsScreen(
     val intakeValves by viewModel.intakeValves.collectAsState()
     val exhaustValves by viewModel.exhaustValves.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.setCylinders(cylinders)
-        viewModel.setIntakeValves(intakeValves)
-        viewModel.setExhaustValves(exhaustValves)
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +45,11 @@ fun EngineParamsScreen(
         }
 
         Spacer(modifier = Modifier.weight(1f))
-        Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = {
+            if (viewModel.saveData()) {
+                onNext()
+            }
+        }, modifier = Modifier.fillMaxWidth()) {
             Text("Next")
         }
     }

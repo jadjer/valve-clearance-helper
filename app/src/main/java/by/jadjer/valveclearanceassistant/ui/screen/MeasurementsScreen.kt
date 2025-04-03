@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,7 +27,7 @@ fun MeasurementsScreen(
         factory = MeasurementsViewModelFactory(repository),
     )
 
-    val measurements by viewModel.measurements.collectAsState()
+    val measurements by remember { derivedStateOf { viewModel.measurements } }
 
     Column(
         modifier = Modifier
@@ -45,18 +43,18 @@ fun MeasurementsScreen(
             items(measurements) { measurement ->
                 TwoFloatInputsInRow(
                     label1 = "Valve ${measurement.valveNumber}",
-                    value1 = 0.16f,
+                    value1 = measurement.clearance,
                     label2 = "Shim",
-                    value2 = 1.325f,
+                    value2 = measurement.shim.size,
                     onValueChange = { clearance, shim ->
-
+                        viewModel.updateMeasuredValue(measurement.valveNumber, clearance, shim)
                     },
                 )
             }
         }
 
         Spacer(modifier = Modifier.weight(1f))
-        Button(onClick = onNext, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = onNext, modifier = Modifier.fillMaxWidth(), enabled = viewModel.isValid()) {
             Text("Next")
         }
     }
