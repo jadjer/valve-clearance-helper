@@ -5,8 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+
 import androidx.compose.ui.Modifier
 import by.jadjer.valveclearance.ui.AppNavGraph
 import by.jadjer.valveclearance.ui.theme.ValveClearanceTheme
@@ -23,7 +25,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             ValveClearanceTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .systemBarsPadding()
+                        .fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     AppNavGraph(app)

@@ -5,6 +5,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,6 +28,12 @@ fun ServiceLimitsScreen(
     val exhaustClearanceMin by viewModel.exhaustClearanceMin.collectAsState()
     val exhaustClearanceMax by viewModel.exhaustClearanceMax.collectAsState()
 
+    val (focus1, focus2, focus3, focus4) = remember { FocusRequester.createRefs() }
+
+    LaunchedEffect(Unit) {
+        focus1.requestFocus()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -33,13 +41,40 @@ fun ServiceLimitsScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Service Limits (mm)", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+        Text(
+            text = "Service Limits (mm)",
+            style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center,
+        )
         Spacer(modifier = Modifier.weight(1f))
 
-        FloatInput(label = "Intake valve min", value = intakeClearanceMin, onValueChange = { viewModel.setIntakeClearanceMin(it) })
-        FloatInput(label = "Intake valve max", value = intakeClearanceMax, onValueChange = { viewModel.setIntakeClearanceMax(it) })
-        FloatInput(label = "Exhaust valve min", value = exhaustClearanceMin, onValueChange = { viewModel.setExhaustClearanceMin(it) })
-        FloatInput(label = "Exhaust valve max", value = exhaustClearanceMax, onValueChange = { viewModel.setExhaustClearanceMax(it) })
+        FloatInput(
+            label = "Intake valve min",
+            value = intakeClearanceMin,
+            onValueChange = { viewModel.setIntakeClearanceMin(it) },
+            focusRequester = focus1,
+            nextFocusRequester = focus2
+        )
+        FloatInput(
+            label = "Intake valve max",
+            value = intakeClearanceMax,
+            onValueChange = { viewModel.setIntakeClearanceMax(it) },
+            focusRequester = focus2,
+            nextFocusRequester = focus3
+        )
+        FloatInput(
+            label = "Exhaust valve min",
+            value = exhaustClearanceMin,
+            onValueChange = { viewModel.setExhaustClearanceMin(it) },
+            focusRequester = focus3,
+            nextFocusRequester = focus4
+        )
+        FloatInput(
+            label = "Exhaust valve max",
+            value = exhaustClearanceMax,
+            onValueChange = { viewModel.setExhaustClearanceMax(it) },
+            focusRequester = focus4,
+        )
 
         Spacer(modifier = Modifier.weight(1f))
         Button(onClick = {
