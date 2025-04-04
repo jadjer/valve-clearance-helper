@@ -5,17 +5,21 @@ plugins {
 }
 
 android {
-    namespace = "by.jadjer.valveclearanceassistant"
+    namespace = "by.jadjer.valveclearance"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "by.jadjer.valveclearanceassistant"
+        applicationId = "by.jadjer.valveclearance"
         minSdk = 29
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            debugSymbolLevel = "FULL"
+        }
     }
 
     buildTypes {
@@ -50,6 +54,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation(project(":ShimCalculator"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
