@@ -1,4 +1,4 @@
-package by.jadjer.valveclearanceassistant
+package by.jadjer.valveclearance
 
 import org.junit.Test
 

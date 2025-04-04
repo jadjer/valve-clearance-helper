@@ -1,4 +1,4 @@
-package by.jadjer.valveclearanceassistant
+package by.jadjer.valveclearance
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import by.jadjer.valveclearanceassistant.ui.AppNavGraph
-import by.jadjer.valveclearanceassistant.ui.theme.ValveClearanceAssistantTheme
+import by.jadjer.valveclearance.ui.AppNavGraph
+import by.jadjer.valveclearance.ui.theme.ValveClearanceTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            ValveClearanceAssistantTheme {
+            ValveClearanceTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,

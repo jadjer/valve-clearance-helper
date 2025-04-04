@@ -1,4 +1,4 @@
-package by.jadjer.valveclearanceassistant.ui.screen
+package by.jadjer.valveclearance.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -9,10 +9,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
-import by.jadjer.valveclearanceassistant.ui.component.FloatInput
-import by.jadjer.valveclearanceassistant.ui.viewmodel.ServiceLimitsViewModel
-import by.jadjer.valveclearanceassistant.ui.viewmodel.ServiceLimitsViewModelFactory
+import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.ui.component.FloatInput
+import by.jadjer.valveclearance.ui.viewmodel.ServiceLimitsViewModel
+import by.jadjer.valveclearance.ui.viewmodel.ServiceLimitsViewModelFactory
 
 @Composable
 fun ServiceLimitsScreen(

@@ -1,8 +1,8 @@
-package by.jadjer.valveclearanceassistant.ui.viewmodel
+package by.jadjer.valveclearance.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.repository.ValveClearanceRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

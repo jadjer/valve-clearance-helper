@@ -1,4 +1,4 @@
-package by.jadjer.valveclearanceassistant.ui.screen
+package by.jadjer.valveclearance.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -10,10 +10,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
-import by.jadjer.valveclearanceassistant.ui.component.NumberInput
-import by.jadjer.valveclearanceassistant.ui.viewmodel.EngineParamsViewModel
-import by.jadjer.valveclearanceassistant.ui.viewmodel.EngineParamsViewModelFactory
+import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.ui.component.NumberInput
+import by.jadjer.valveclearance.ui.viewmodel.EngineParamsViewModel
+import by.jadjer.valveclearance.ui.viewmodel.EngineParamsViewModelFactory
 
 @Composable
 fun EngineParamsScreen(

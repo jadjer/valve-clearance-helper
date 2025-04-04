@@ -1,8 +1,8 @@
-package by.jadjer.valveclearanceassistant.ui.viewmodel
+package by.jadjer.valveclearance.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.repository.ValveClearanceRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,7 +42,9 @@ class ServiceLimitsViewModel(private val repository: ValveClearanceRepository) :
             _exhaustClearanceMin.value,
             _exhaustClearanceMax.value
         )
-        return clearances.all { it > 0 }
+        return clearances.all { it > 0 } &&
+                _intakeClearanceMin.value <= _intakeClearanceMax.value &&
+                _exhaustClearanceMin.value <= _exhaustClearanceMax.value
     }
 
     fun saveData() : Boolean {

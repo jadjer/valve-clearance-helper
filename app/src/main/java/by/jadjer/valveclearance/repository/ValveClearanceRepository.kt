@@ -1,4 +1,4 @@
-package by.jadjer.valveclearanceassistant.repository
+package by.jadjer.valveclearance.repository
 
 import by.jadjer.shimcalculator.ClearanceCalculator
 import by.jadjer.shimcalculator.models.Instruction

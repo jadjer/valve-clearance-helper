@@ -1,4 +1,4 @@
-package by.jadjer.valveclearanceassistant.ui.component
+package by.jadjer.valveclearance.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -1,4 +1,4 @@
-package by.jadjer.valveclearanceassistant.ui.screen
+package by.jadjer.valveclearance.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

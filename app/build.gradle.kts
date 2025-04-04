@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "by.jadjer.valveclearanceassistant"
+    namespace = "by.jadjer.valveclearance"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "by.jadjer.valveclearanceassistant"
+        applicationId = "by.jadjer.valveclearance"
         minSdk = 29
         targetSdk = 35
         versionCode = 1

@@ -1,13 +1,13 @@
-package by.jadjer.valveclearanceassistant.ui
+package by.jadjer.valveclearance.ui
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.*
-import by.jadjer.valveclearanceassistant.App
-import by.jadjer.valveclearanceassistant.ui.screen.EngineParamsScreen
-import by.jadjer.valveclearanceassistant.ui.screen.MeasurementsScreen
-import by.jadjer.valveclearanceassistant.ui.screen.ResultsScreen
-import by.jadjer.valveclearanceassistant.ui.screen.ServiceLimitsScreen
-import by.jadjer.valveclearanceassistant.ui.screen.WelcomeScreen
+import by.jadjer.valveclearance.App
+import by.jadjer.valveclearance.ui.screen.EngineParamsScreen
+import by.jadjer.valveclearance.ui.screen.MeasurementsScreen
+import by.jadjer.valveclearance.ui.screen.ResultsScreen
+import by.jadjer.valveclearance.ui.screen.ServiceLimitsScreen
+import by.jadjer.valveclearance.ui.screen.WelcomeScreen
 
 @Composable
 fun AppNavGraph(app: App) {
@@ -44,7 +44,6 @@ fun AppNavGraph(app: App) {
         composable("results") {
             ResultsScreen(
                 repository = repository,
-                onRestart = { navController.popBackStack("welcome", inclusive = false) }
             )
         }
     }

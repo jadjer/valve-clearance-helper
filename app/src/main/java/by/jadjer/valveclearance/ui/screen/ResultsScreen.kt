@@ -1,4 +1,4 @@
-package by.jadjer.valveclearanceassistant.ui.screen
+package by.jadjer.valveclearance.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -16,16 +16,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import by.jadjer.shimcalculator.models.ActionType
 import by.jadjer.shimcalculator.models.Instruction
 import by.jadjer.shimcalculator.models.ValveType
-import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
-import by.jadjer.valveclearanceassistant.ui.viewmodel.ResultsViewModel
-import by.jadjer.valveclearanceassistant.ui.viewmodel.ResultsViewModelFactory
-import by.jadjer.valveclearanceassistant.ui.viewmodel.ValveAdjustmentUiState
+import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.ui.viewmodel.ResultsViewModel
+import by.jadjer.valveclearance.ui.viewmodel.ResultsViewModelFactory
+import by.jadjer.valveclearance.ui.viewmodel.ValveAdjustmentUiState
 
 @Composable
-fun ResultsScreen(
-    repository: ValveClearanceRepository = ValveClearanceRepository(),
-    onRestart: () -> Unit
-) {
+fun ResultsScreen(repository: ValveClearanceRepository = ValveClearanceRepository(), ) {
     val viewModel: ResultsViewModel = viewModel(factory = ResultsViewModelFactory(repository))
     val uiState by viewModel.uiState.collectAsState()
 

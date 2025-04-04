@@ -1,4 +1,4 @@
-package by.jadjer.valveclearanceassistant.ui.screen
+package by.jadjer.valveclearance.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -13,10 +13,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import by.jadjer.shimcalculator.models.ValveType
-import by.jadjer.valveclearanceassistant.repository.ValveClearanceRepository
-import by.jadjer.valveclearanceassistant.ui.viewmodel.MeasurementsViewModel
-import by.jadjer.valveclearanceassistant.ui.viewmodel.MeasurementsViewModelFactory
+import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.ui.viewmodel.MeasurementsViewModel
+import by.jadjer.valveclearance.ui.viewmodel.MeasurementsViewModelFactory
 
 @Composable
 fun MeasurementsScreen(
