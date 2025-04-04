@@ -124,5 +124,5 @@ fun ErrorScreen(message: String) {
 @Preview(showBackground = true)
 @Composable
 fun ResultsScreenPreview() {
-    ResultsScreen {}
+    ResultsScreen()
 }
