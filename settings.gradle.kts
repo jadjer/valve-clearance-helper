@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Valve Clearance Helper"
+rootProject.name = "ValveClearanceHelper"
 include(":app")
 include(":ShimCalculator")
