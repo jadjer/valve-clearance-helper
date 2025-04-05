@@ -28,10 +28,9 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FloatInput(
-    label: String,
     value: Float,
-    modifier: Modifier = Modifier,
-    onValueChange: (Float) -> Unit,  // Принимаем Float? для поддержки очистки поля
+    label: String = "",
+    onValueChange: (Float) -> Unit,
     validator: (Float) -> Boolean = { true },
     focusRequester: FocusRequester = remember { FocusRequester() },
     nextFocusRequester: FocusRequester? = null,
@@ -41,65 +40,63 @@ fun FloatInput(
     var isError by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column(modifier = modifier.padding(vertical = 8.dp)) {
-        Text(label, style = MaterialTheme.typography.bodyMedium)
-        OutlinedTextField(
-            value = textValue,
-            onValueChange = { newValue ->
-                textValue = newValue
+    OutlinedTextField(
+        value = textValue,
+        onValueChange = { newValue ->
+            textValue = newValue
 
-                if (newValue.isEmpty()) {
-                    isError = true
-                    return@OutlinedTextField
-                }
-
-                val floatValue = newValue.toFloatOrNull()
-                if (floatValue == null) {
-                    isError = true  // Ошибка, если не число
-                    return@OutlinedTextField
-                }
-
-                isError = !validator(floatValue)
-                if (!isError) {
-                    onValueChange(floatValue)
-                }
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Decimal,
-                imeAction = if (nextFocusRequester != null) ImeAction.Next else ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { nextFocusRequester?.requestFocus() },
-                onDone = { keyboardController?.hide() }
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusRequester(focusRequester)
-                .onFocusChanged { onFocusChanged(it.isFocused) },
-            isError = isError,
-            trailingIcon = {
-                if (isError) {
-                    Icon(
-                        imageVector = Icons.Default.Warning,
-                        contentDescription = "Error",
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
-            },
-            supportingText = {
-                if (isError) {
-                    Text(
-                        text = if (textValue.isEmpty()) {
-                            "Field cannot be empty"
-                        } else {
-                            "Enter a valid number"
-                        },
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
+            if (newValue.isEmpty()) {
+                isError = true
+                return@OutlinedTextField
             }
-        )
-    }
+
+            val floatValue = newValue.toFloatOrNull()
+            if (floatValue == null) {
+                isError = true  // Ошибка, если не число
+                return@OutlinedTextField
+            }
+
+            isError = !validator(floatValue)
+            if (!isError) {
+                onValueChange(floatValue)
+            }
+        },
+        label = { Text(text = label, style = MaterialTheme.typography.bodyMedium) },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal,
+            imeAction = if (nextFocusRequester != null) ImeAction.Next else ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onNext = { nextFocusRequester?.requestFocus() },
+            onDone = { keyboardController?.hide() }
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester)
+            .onFocusChanged { onFocusChanged(it.isFocused) },
+        isError = isError,
+        trailingIcon = {
+            if (isError) {
+                Icon(
+                    imageVector = Icons.Default.Warning,
+                    contentDescription = "Error",
+                    tint = MaterialTheme.colorScheme.error
+                )
+            }
+        },
+        supportingText = {
+            if (isError) {
+                Text(
+                    text = if (textValue.isEmpty()) {
+                        "Field cannot be empty"
+                    } else {
+                        "Enter a valid number"
+                    },
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+    )
 }
 
 @Preview

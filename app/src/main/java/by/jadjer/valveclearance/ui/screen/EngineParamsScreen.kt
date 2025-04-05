@@ -6,10 +6,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import by.jadjer.valveclearance.R
 import by.jadjer.valveclearance.repository.ValveClearanceRepository
 import by.jadjer.valveclearance.ui.component.NumberInput
 import by.jadjer.valveclearance.ui.viewmodel.EngineParamsViewModel
@@ -35,13 +37,32 @@ fun EngineParamsScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Engine Parameters", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+        Text(
+            text = stringResource(R.string.screen_engine_params),
+            style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center
+        )
         Spacer(modifier = Modifier.weight(1f))
 
         Column {
-            NumberInput(label = "Number of cylinders", value = cylinders, onValueChange = { viewModel.setCylinders(it) }, range = 1..12)
-            NumberInput(label = "Intake valves per cylinder", value = intakeValves, onValueChange = { viewModel.setIntakeValves(it) }, range = 1..4)
-            NumberInput(label = "Exhaust valves per cylinder", value = exhaustValves, onValueChange = { viewModel.setExhaustValves(it) }, range = 1..4)
+            NumberInput(
+                label = stringResource(R.string.cylinders),
+                value = cylinders,
+                onValueChange = { viewModel.setCylinders(it) },
+                range = 1..12
+            )
+            NumberInput(
+                label = stringResource(R.string.intake_valves),
+                value = intakeValves,
+                onValueChange = { viewModel.setIntakeValves(it) },
+                range = 1..4
+            )
+            NumberInput(
+                label = stringResource(R.string.exhaust_valves),
+                value = exhaustValves,
+                onValueChange = { viewModel.setExhaustValves(it) },
+                range = 1..4
+            )
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -50,7 +71,7 @@ fun EngineParamsScreen(
                 onNext()
             }
         }, modifier = Modifier.fillMaxWidth()) {
-            Text("Next")
+            Text(text = stringResource(R.string.button_next))
         }
     }
 }

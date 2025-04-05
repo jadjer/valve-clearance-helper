@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="valve_type_intake">Впуск</string>
+    <string name="valve_type_exhaust">Выпуск</string>
+    <string name="app_description">Это приложение поможет вам рассчитать оптимальную конфигурацию прокладки для регулировки клапана</string>
+    <string name="button_start">Начать</string>
+    <string name="button_next">Далее</string>
+    <string name="screen_engine_params">Параметры двигателя</string>
+    <string name="cylinders">Колечество цилиндров</string>
+    <string name="intake_valves">Впускных клапанов на цилинд</string>
+    <string name="exhaust_valves">Выпускных клапанов на цилинд</string>
+    <string name="screen_service_limit">Сервисный лимит (мм)</string>
+    <string name="intake_valve_min">Впускной клапан (мин)</string>
+    <string name="intake_valve_max">Впускной клапан (макс)</string>
+    <string name="exhaust_valve_min">Выпускной клапан (мин)</string>
+    <string name="exhaust_valve_max">Выпускной клапан (макс)</string>
+    <string name="screen_measured_clearances">Измеренные зазоры (мм)</string>
+    <string name="screen_result">Действия для клапанов</string>
+    <string name="action_keep">Оставить текущую шайбу</string>
+    <string name="action_move">Переставить шайбу с клапана %1</string>
+    <string name="action_replace">Установить новую шайбу</string>
+    <string name="label_error">Ошибка</string>
+    <string name="label_valve_with_type">Клапан %1$d (тип: %2$s)</string>
+    <string name="clearance_current">Текущий зазор %1$.3f мм</string>
+    <string name="clearance_target">Необходимый зазор %1$.3f мм</string>
+    <string name="shim_current">Текущая толщина шайбы %1$.3f мм</string>
+    <string name="shim_target">Необходимая толщина шайбы %1$.3f мм</string>
+    <string name="label_min">Мин</string>
+    <string name="label_max">Макс</string>
+</resources>

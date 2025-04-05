@@ -6,11 +6,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.stringResource
 
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import by.jadjer.valveclearance.R
 import by.jadjer.valveclearance.repository.ValveClearanceRepository
 import by.jadjer.valveclearance.ui.component.FloatInput
 import by.jadjer.valveclearance.ui.viewmodel.ServiceLimitsViewModel
@@ -42,35 +44,40 @@ fun ServiceLimitsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Service Limits (mm)",
+            text = stringResource(R.string.screen_service_limit),
             style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.weight(1f))
 
+        Text("Intake valves:")
         FloatInput(
-            label = "Intake valve min",
+            label = stringResource(R.string.label_min),
             value = intakeClearanceMin,
             onValueChange = { viewModel.setIntakeClearanceMin(it) },
             focusRequester = focus1,
             nextFocusRequester = focus2
         )
         FloatInput(
-            label = "Intake valve max",
+            label = stringResource(R.string.label_max),
             value = intakeClearanceMax,
             onValueChange = { viewModel.setIntakeClearanceMax(it) },
             focusRequester = focus2,
             nextFocusRequester = focus3
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text("Exhaust valves:")
         FloatInput(
-            label = "Exhaust valve min",
+            label = stringResource(R.string.label_min),
             value = exhaustClearanceMin,
             onValueChange = { viewModel.setExhaustClearanceMin(it) },
             focusRequester = focus3,
             nextFocusRequester = focus4
         )
         FloatInput(
-            label = "Exhaust valve max",
+            label = stringResource(R.string.label_max),
             value = exhaustClearanceMax,
             onValueChange = { viewModel.setExhaustClearanceMax(it) },
             focusRequester = focus4,
@@ -82,7 +89,7 @@ fun ServiceLimitsScreen(
                 onNext()
             }
         }, modifier = Modifier.fillMaxWidth(), enabled = viewModel.isValid()) {
-            Text("Next")
+            Text(text = stringResource(R.string.button_next))
         }
     }
 }

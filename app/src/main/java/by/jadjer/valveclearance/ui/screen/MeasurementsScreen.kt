@@ -9,10 +9,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import by.jadjer.valveclearance.R
 import by.jadjer.valveclearance.repository.ValveClearanceRepository
 import by.jadjer.valveclearance.ui.viewmodel.MeasurementsViewModel
 import by.jadjer.valveclearance.ui.viewmodel.MeasurementsViewModelFactory
@@ -35,7 +38,11 @@ fun MeasurementsScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Measured Clearances (mm)", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = stringResource(R.string.screen_measured_clearances),
+            style = MaterialTheme.typography.headlineMedium,
+            textAlign = TextAlign.Center
+        )
         Spacer(modifier = Modifier.weight(1f))
 
         LazyColumn {
@@ -54,7 +61,7 @@ fun MeasurementsScreen(
 
         Spacer(modifier = Modifier.weight(1f))
         Button(onClick = onNext, modifier = Modifier.fillMaxWidth(), enabled = viewModel.isValid()) {
-            Text("Next")
+            Text(text = stringResource(R.string.button_next))
         }
     }
 }

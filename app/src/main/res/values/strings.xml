@@ -1,3 +1,30 @@
 <resources>
-    <string name="app_name">Valve Clearance Helper</string>
+    <string name="app_name" translatable="false">Valve Clearance Helper</string>
+    <string name="valve_type_intake">Intake</string>
+    <string name="valve_type_exhaust">Exhaust</string>
+    <string name="app_description">This app helps you calculate optimal shim configuration for valve adjustment</string>
+    <string name="button_start">Start</string>
+    <string name="button_next">Next</string>
+    <string name="screen_engine_params">Engine Parameters</string>
+    <string name="cylinders">Number of cylinders</string>
+    <string name="intake_valves">Intake valves per cylinder</string>
+    <string name="exhaust_valves">Exhaust valves per cylinder</string>
+    <string name="screen_service_limit">Service Limits (mm)</string>
+    <string name="intake_valve_min">Intake valve min</string>
+    <string name="intake_valve_max">Intake valve max</string>
+    <string name="exhaust_valve_min">Exhaust valve min</string>
+    <string name="exhaust_valve_max">Exhaust valve max</string>
+    <string name="screen_measured_clearances">Measured Clearances (mm)</string>
+    <string name="screen_result">Actions for valves</string>
+    <string name="action_keep">Keep the current shim in the place</string>
+    <string name="action_move">Move the shim from valve %1</string>
+    <string name="action_replace">Replace the shim with a new one</string>
+    <string name="label_error">Error</string>
+    <string name="label_valve_with_type">Valve %1$d (type: %2$s)</string>
+    <string name="clearance_current">Current clerance %1$.3f mm</string>
+    <string name="clearance_target">Current target %1$.3f mm</string>
+    <string name="shim_current">Current shim size %1$.3f mm</string>
+    <string name="shim_target">Target shim size %1$.3f mm</string>
+    <string name="label_min">Min</string>
+    <string name="label_max">Max</string>
 </resources>
