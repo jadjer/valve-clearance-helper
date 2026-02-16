@@ -1,4 +1,4 @@
-package by.jadjer.valveclearance
+package by.jadjer.valveclearance.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import by.jadjer.valveclearance.ui.AppNavGraph
+import by.jadjer.valveclearance.App
 import by.jadjer.valveclearance.ui.theme.ValveClearanceTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ValveClearanceTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.Companion.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     AppNavGraph(app)
