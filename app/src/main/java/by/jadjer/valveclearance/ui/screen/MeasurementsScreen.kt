@@ -13,13 +13,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.data.repository.ValveClearanceRepositoryImpl
+import by.jadjer.valveclearance.ui.component.TwoFloatInputsInRow
 import by.jadjer.valveclearance.ui.viewmodel.MeasurementsViewModel
 import by.jadjer.valveclearance.ui.viewmodel.MeasurementsViewModelFactory
 
 @Composable
 fun MeasurementsScreen(
-    repository: ValveClearanceRepository = ValveClearanceRepository(),
+    repository: ValveClearanceRepositoryImpl = ValveClearanceRepositoryImpl(),
     onNext: () -> Unit
 ) {
     val viewModel: MeasurementsViewModel = viewModel(
@@ -56,70 +57,6 @@ fun MeasurementsScreen(
         Button(onClick = onNext, modifier = Modifier.fillMaxWidth(), enabled = viewModel.isValid()) {
             Text("Next")
         }
-    }
-}
-
-@Composable
-fun TwoFloatInputsInRow(
-    label1: String,
-    value1: Float,
-    label2: String,
-    value2: Float,
-    onValueChange: (Float, Float) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var textValue1 by remember { mutableStateOf(value1.toString()) }
-    var textValue2 by remember { mutableStateOf(value2.toString()) }
-
-    val floatValue1 = textValue1.toFloatOrNull()
-    val floatValue2 = textValue2.toFloatOrNull()
-    val bothValid = floatValue1 != null && floatValue2 != null
-
-    LaunchedEffect(floatValue1, floatValue2) {
-        if (bothValid) {
-            onValueChange(floatValue1, floatValue2)
-        }
-    }
-
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        FloatInput(
-            label = label1,
-            value = textValue1,
-            onValueChange = { textValue1 = it },
-            modifier = Modifier.weight(1f),
-            isError = textValue1.isNotEmpty() && floatValue1 == null
-        )
-
-        FloatInput(
-            label = label2,
-            value = textValue2,
-            onValueChange = { textValue2 = it },
-            modifier = Modifier.weight(1f),
-            isError = textValue2.isNotEmpty() && floatValue2 == null
-        )
-    }
-}
-
-@Composable
-fun FloatInput(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    isError: Boolean = false
-) {
-    Column(modifier = modifier.padding(vertical = 8.dp)) {
-        Text(label, style = MaterialTheme.typography.bodyMedium)
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth(),
-            isError = isError
-        )
     }
 }
 

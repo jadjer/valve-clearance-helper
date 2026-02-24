@@ -2,15 +2,16 @@ package by.jadjer.valveclearance.ui
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.*
-import by.jadjer.valveclearance.App
+import by.jadjer.valveclearance.ValveClearanceApplication
 import by.jadjer.valveclearance.ui.screen.EngineParamsScreen
 import by.jadjer.valveclearance.ui.screen.MeasurementsScreen
 import by.jadjer.valveclearance.ui.screen.ResultsScreen
 import by.jadjer.valveclearance.ui.screen.ServiceLimitsScreen
+import by.jadjer.valveclearance.ui.screen.VehicleListScreen
 import by.jadjer.valveclearance.ui.screen.WelcomeScreen
 
 @Composable
-fun AppNavGraph(app: App) {
+fun AppNavGraph(app: ValveClearanceApplication) {
     val navController = rememberNavController()
     val repository = app.valveClearanceRepository
 
@@ -18,6 +19,9 @@ fun AppNavGraph(app: App) {
         navController = navController,
         startDestination = "welcome"
     ) {
+        composable(route = "vehicle_list") {
+            VehicleListScreen()
+        }
         composable("welcome") {
             WelcomeScreen(
                 onNext = { navController.navigate("engineParams") }

@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import by.jadjer.shimcalculator.models.ValveMeasurement
-import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.domain.repository.ValveClearanceRepository
 
 class MeasurementsViewModel(private val repository: ValveClearanceRepository) : ViewModel() {
 
@@ -32,7 +32,7 @@ class MeasurementsViewModel(private val repository: ValveClearanceRepository) : 
     }
 }
 
-class MeasurementsViewModelFactory(private val repository: ValveClearanceRepository) : ViewModelProvider.Factory {
+class MeasurementsViewModelFactory(private val repository: ValveClearanceRepositoryImpl) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MeasurementsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

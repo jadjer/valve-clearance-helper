@@ -24,26 +24,20 @@ fun FloatInput(
     value: Float,
     onValueChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
+    isError: Boolean = false
 ) {
-    var textValue by remember { mutableStateOf(value.toString()) }
-
-    // Синхронизация при изменении внешнего value
-    LaunchedEffect(value) {
-        textValue = value.toString()
-    }
-
     Column(modifier = modifier.padding(vertical = 8.dp)) {
         Text(label, style = MaterialTheme.typography.bodyMedium)
         OutlinedTextField(
-            value = textValue,
+            value = value.toString(),
             onValueChange = {
-                textValue = it
                 it.toFloatOrNull()?.let { float ->
                     onValueChange(float)
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            isError = isError,
         )
     }
 }
@@ -51,5 +45,5 @@ fun FloatInput(
 @Preview
 @Composable
 fun FloatInputPreview() {
-    FloatInput(label = "Test", value = 123f, onValueChange = {})
+    FloatInput(label = "Test", value = 12.0f, onValueChange = { _ -> }, isError = true)
 }

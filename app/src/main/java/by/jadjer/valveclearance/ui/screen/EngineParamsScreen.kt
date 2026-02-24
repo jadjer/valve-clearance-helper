@@ -10,14 +10,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.data.repository.ValveClearanceRepositoryImpl
 import by.jadjer.valveclearance.ui.component.NumberInput
 import by.jadjer.valveclearance.ui.viewmodel.EngineParamsViewModel
 import by.jadjer.valveclearance.ui.viewmodel.EngineParamsViewModelFactory
 
 @Composable
 fun EngineParamsScreen(
-    repository: ValveClearanceRepository = ValveClearanceRepository(),
+    repository: ValveClearanceRepositoryImpl = ValveClearanceRepositoryImpl(),
     onNext: () -> Unit,
 ) {
     val viewModel: EngineParamsViewModel = viewModel(

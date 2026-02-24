@@ -2,7 +2,7 @@ package by.jadjer.valveclearance.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.domain.repository.ValveClearanceRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -59,7 +59,7 @@ class ServiceLimitsViewModel(private val repository: ValveClearanceRepository) :
     }
 }
 
-class ServiceLimitsViewModelFactory(private val repository: ValveClearanceRepository) : ViewModelProvider.Factory {
+class ServiceLimitsViewModelFactory(private val repository: ValveClearanceRepositoryImpl) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ServiceLimitsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

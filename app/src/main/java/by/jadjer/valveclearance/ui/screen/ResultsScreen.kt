@@ -16,13 +16,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import by.jadjer.shimcalculator.models.ActionType
 import by.jadjer.shimcalculator.models.Instruction
 import by.jadjer.shimcalculator.models.ValveType
-import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.data.repository.ValveClearanceRepositoryImpl
+import by.jadjer.valveclearance.ui.component.InstructionList
 import by.jadjer.valveclearance.ui.viewmodel.ResultsViewModel
 import by.jadjer.valveclearance.ui.viewmodel.ResultsViewModelFactory
 import by.jadjer.valveclearance.ui.viewmodel.ValveAdjustmentUiState
 
 @Composable
-fun ResultsScreen(repository: ValveClearanceRepository = ValveClearanceRepository(), ) {
+fun ResultsScreen(repository: ValveClearanceRepositoryImpl = ValveClearanceRepositoryImpl(), ) {
     val viewModel: ResultsViewModel = viewModel(factory = ResultsViewModelFactory(repository))
     val uiState by viewModel.uiState.collectAsState()
 
@@ -54,69 +55,6 @@ fun ResultsScreen(repository: ValveClearanceRepository = ValveClearanceRepositor
 
                 InstructionList(instructions = state.instructions)
             }
-        }
-    }
-}
-
-@Composable
-fun InstructionList(instructions: List<Instruction>) {
-    LazyColumn(modifier = Modifier.padding(16.dp)) {
-        items(instructions) { instruction ->
-            InstructionItem(instruction = instruction)
-        }
-    }
-}
-
-@Composable
-fun InstructionItem(instruction: Instruction) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Клапан ${instruction.valve.measurement.valveNumber}",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = when (instruction.valve.measurement.valveType) {
-                    ValveType.INTAKE -> "Тип: Впуск"
-                    ValveType.EXHAUST -> "Тип: Выпуск"
-                }
-            )
-            Text("Текущий зазор: ${instruction.valve.measurement.clearance} мм")
-
-            Text("Целевой зазор: ${instruction.valve.targetClearance} мм")
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = when (instruction.action) {
-                    ActionType.KEEP -> "Оставить текущую шайбу"
-                    ActionType.MOVE -> "Переставить шайбу с клапана ${instruction.newShim.valveNumber}"
-                    ActionType.REPLACE -> "Установить новую шайбу"
-                },
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text("Размер шайбы: ${instruction.newShim.size} мм")
-        }
-    }
-}
-
-@Composable
-fun ErrorScreen(message: String) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                imageVector = Icons.Default.Warning,
-                contentDescription = "Error",
-                tint = MaterialTheme.colorScheme.error,
-                modifier = Modifier.size(48.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = message)
         }
     }
 }

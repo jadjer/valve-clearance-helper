@@ -2,7 +2,7 @@ package by.jadjer.valveclearance.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import by.jadjer.valveclearance.repository.ValveClearanceRepository
+import by.jadjer.valveclearance.domain.repository.ValveClearanceRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +35,7 @@ class EngineParamsViewModel(private val repository: ValveClearanceRepository) : 
     }
 }
 
-class EngineParamsViewModelFactory(private val repository: ValveClearanceRepository) : ViewModelProvider.Factory {
+class EngineParamsViewModelFactory(private val repository: ValveClearanceRepositoryImpl) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(EngineParamsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
