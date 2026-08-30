@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ServiceLimitsViewModel(private val repository: ValveClearanceRepository) : ViewModel() {
 
-    private val _intakeClearanceMin = MutableStateFlow<Float>(repository.specification.intakeMin)
-    private val _intakeClearanceMax = MutableStateFlow<Float>(repository.specification.intakeMax)
-    private val _exhaustClearanceMin = MutableStateFlow<Float>(repository.specification.exhaustMin)
-    private val _exhaustClearanceMax = MutableStateFlow<Float>(repository.specification.exhaustMax)
+    private val _intakeClearanceMin = MutableStateFlow<Float>(repository.specification.value.intakeMin)
+    private val _intakeClearanceMax = MutableStateFlow<Float>(repository.specification.value.intakeMax)
+    private val _exhaustClearanceMin = MutableStateFlow<Float>(repository.specification.value.exhaustMin)
+    private val _exhaustClearanceMax = MutableStateFlow<Float>(repository.specification.value.exhaustMax)
 
     val intakeClearanceMin: StateFlow<Float> = _intakeClearanceMin.asStateFlow()
     val intakeClearanceMax: StateFlow<Float> = _intakeClearanceMax.asStateFlow()
@@ -59,7 +59,7 @@ class ServiceLimitsViewModel(private val repository: ValveClearanceRepository) :
     }
 }
 
-class ServiceLimitsViewModelFactory(private val repository: ValveClearanceRepositoryImpl) : ViewModelProvider.Factory {
+class ServiceLimitsViewModelFactory(private val repository: ValveClearanceRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ServiceLimitsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

@@ -1,14 +1,25 @@
 package by.jadjer.valveclearance.domain.repository
 
-import by.jadjer.shimcalculator.models.Instruction
+import by.jadjer.shimcalculator.models.ValveMeasurement
 import by.jadjer.valveclearance.domain.model.Vehicle
+import kotlinx.coroutines.flow.Flow
 
 interface VehicleRepository {
-    fun getVehicles(): List<Vehicle>;
-    fun createVehicle(vehicle: Vehicle);
-
-    fun updateVehicleClearance(vehicle: Vehicle, intakeMin: Float, intakeMax: Float, exhaustMin: Float, exhaustMax: Float);
-    fun updateVehicleMeasuredValue(vehicle: Vehicle, valveNumber: Int, clearance: Float, shim: Float)
-
-    fun calculateAdjustedValves(): List<Instruction>;
+    fun getAllVehicles(): Flow<List<Vehicle>>
+    suspend fun getVehicleById(id: Long): Vehicle?
+    suspend fun addVehicle(vehicle: Vehicle)
+    suspend fun updateVehicle(vehicle: Vehicle)
+    suspend fun deleteVehicle(vehicle: Vehicle)
+    
+    suspend fun saveMeasurementSession(vehicle: Vehicle, measurements: List<ValveMeasurement>)
+    fun getSessionsForVehicle(vehicleId: Long): Flow<List<MeasurementSession>>
+    suspend fun getMeasurementsForSession(sessionId: Long): List<ValveMeasurement>
+    suspend fun deleteSession(sessionId: Long)
 }
+
+data class MeasurementSession(
+    val id: Long,
+    val vehicleId: Long,
+    val timestamp: Long,
+    val notes: String
+)

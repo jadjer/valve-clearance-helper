@@ -1,5 +1,6 @@
 package by.jadjer.valveclearance.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,14 +23,16 @@ import by.jadjer.valveclearance.utils.formatTimestamp
 @Composable
 fun VehicleItem(
     vehicle: Vehicle,
-    lastCheck: Long
+    lastCheck: Long,
+    onClick: () -> Unit = {}
 ) {
-    val formattedDate = remember(lastCheck) { formatTimestamp(lastCheck) }
+    val formattedDate = remember(lastCheck) { if (lastCheck > 0) formatTimestamp(lastCheck) else "Never" }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
         Column(
@@ -65,7 +68,13 @@ fun VehicleItemPreview() {
 
     VehicleItem(
         vehicle = Vehicle(
-            brand = "Honda", model = "XL1000V Varadero", year = 2008,
+            brand = "Honda",
+            model = "XL1000V Varadero",
+            year = 2008,
+            engine = by.jadjer.valveclearance.domain.model.Engine(
+                listOf(by.jadjer.valveclearance.domain.model.Cylinder(2, 2))
+            ),
+            specification = by.jadjer.shimcalculator.models.ValveSpecification(0.15f, 0.20f, 0.20f, 0.25f)
         ),
         lastCheck = now,
     )

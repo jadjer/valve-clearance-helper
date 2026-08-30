@@ -1,26 +1,33 @@
 package by.jadjer.valveclearance.ui.component
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun NumberInput(label: String, value: Int, onValueChange: (Int) -> Unit, range: IntRange) {
-    Column(modifier = Modifier.padding(vertical = 8.dp)) {
-        Text(text = label, style = MaterialTheme.typography.bodyMedium)
-        Row(verticalAlignment = Alignment.CenterVertically) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = label, 
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
             IconButton(onClick = { if (value > range.first) onValueChange(value - 1) }) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Decrease")
             }
@@ -34,12 +41,4 @@ fun NumberInput(label: String, value: Int, onValueChange: (Int) -> Unit, range: 
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NumberInputPreview() {
-    NumberInput(
-        label = "Test", value = 12, onValueChange = { _ -> }, range = IntRange(10, 20),
-    )
 }

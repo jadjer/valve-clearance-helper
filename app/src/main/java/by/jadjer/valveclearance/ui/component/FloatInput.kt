@@ -1,20 +1,13 @@
 package by.jadjer.valveclearance.ui.component
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -26,8 +19,16 @@ fun FloatInput(
     modifier: Modifier = Modifier,
     isError: Boolean = false
 ) {
-    Column(modifier = modifier.padding(vertical = 8.dp)) {
-        Text(label, style = MaterialTheme.typography.bodyMedium)
+    Column(
+        modifier = modifier.padding(vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = label, 
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
         OutlinedTextField(
             value = value.toString(),
             onValueChange = {
@@ -35,15 +36,16 @@ fun FloatInput(
                     onValueChange(float)
                 }
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             modifier = Modifier.fillMaxWidth(),
             isError = isError,
+            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center)
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun FloatInputPreview() {
-    FloatInput(label = "Test", value = 12.0f, onValueChange = { _ -> }, isError = true)
+    FloatInput(label = "Clearance", value = 0.15f, onValueChange = {})
 }

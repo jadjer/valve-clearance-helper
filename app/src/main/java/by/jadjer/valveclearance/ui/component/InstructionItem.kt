@@ -1,86 +1,93 @@
 package by.jadjer.valveclearance.ui.component
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import by.jadjer.shimcalculator.models.ActionType
-import by.jadjer.shimcalculator.models.Instruction
-import by.jadjer.shimcalculator.models.Shim
-import by.jadjer.shimcalculator.models.ValveForAdjustment
-import by.jadjer.shimcalculator.models.ValveMeasurement
-import by.jadjer.shimcalculator.models.ValveSpecification
-import by.jadjer.shimcalculator.models.ValveType
+import by.jadjer.shimcalculator.models.*
+import by.jadjer.valveclearance.R
 
 @Composable
 fun InstructionItem(instruction: Instruction) {
+    val color = when (instruction.action) {
+        ActionType.KEEP -> Color(0xFF4CAF50)
+        ActionType.MOVE -> Color(0xFFFF9800)
+        ActionType.REPLACE -> Color(0xFFF44336)
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
+        colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.1f)),
+        border = CardDefaults.outlinedCardBorder().copy(brush = androidx.compose.ui.graphics.SolidColor(color))
     ) {
         Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Клапан ${instruction.valve.measurement.valveNumber}",
-                    style = MaterialTheme.typography.titleMedium
+                    text = stringResource(R.string.valve_number, instruction.valve.measurement.valveNumber),
+                    style = MaterialTheme.typography.titleLarge
                 )
+                
+                Badge(containerColor = color) {
+                    Text(text = instruction.action.name, color = Color.White)
+                }
+            }
 
-                Text(
-                    text = when (instruction.valve.measurement.valveType) {
-                        ValveType.INTAKE -> "Впуск"
-                        ValveType.EXHAUST -> "Выпуск"
+            Text(
+                text = instruction.valve.measurement.valveType.name,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = stringResource(R.string.current_clearance, instruction.valve.measurement.clearance),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                text = stringResource(R.string.target_clearance, instruction.valve.targetClearance),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            if (instruction.action != ActionType.KEEP) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    if (instruction.action == ActionType.REPLACE) {
+                        Icon(Icons.Default.Warning, contentDescription = null, tint = color, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
                     }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text("Текущий зазор: ${instruction.valve.measurement.clearance} мм")
-            }
-
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text("Целевой зазор: ${instruction.valve.targetClearance} мм")
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text("Размер шайбы: ${instruction.newShim.size} мм")
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = when (instruction.action) {
-                        ActionType.KEEP -> "Оставить текущую шайбу"
-                        ActionType.MOVE -> "Переставить шайбу с клапана ${instruction.newShim.valveNumber}"
-                        ActionType.REPLACE -> "Установить новую шайбу"
-                    },
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                    Text(
+                        text = stringResource(R.string.new_shim_size, instruction.newShim.size),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = color,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
@@ -89,26 +96,15 @@ fun InstructionItem(instruction: Instruction) {
 @Preview(showBackground = true)
 @Composable
 fun InstructionItemPreview() {
-    InstructionItem(
-        instruction = Instruction(
-            valve = ValveForAdjustment(
-                measurement = ValveMeasurement(
-                    valveNumber = 1,
-                    valveType = ValveType.INTAKE,
-                    0.01f,
-                    shim = Shim(valveNumber = 1, size = 0.12f),
-                ),
-                specification = ValveSpecification(
-                    intakeMin = 0.12f,
-                    intakeMax = 0.15f,
-                    exhaustMin = 0.22f,
-                    exhaustMax = 0.25f
-                ),
-                targetClearance = 0.12f
-            ),
-            action = ActionType.KEEP,
-            newShim = Shim(valveNumber = 2, size = 0.19f),
-            newClearance = 0.24f,
-        )
+    val mockInstruction = Instruction(
+        valve = ValveForAdjustment(
+            measurement = ValveMeasurement(1, ValveType.INTAKE, 0.15f, Shim(1, 2.50f)),
+            specification = ValveSpecification(0.10f, 0.20f, 0.20f, 0.30f),
+            targetClearance = 0.15f
+        ),
+        action = ActionType.REPLACE,
+        newShim = Shim(1, 2.55f),
+        newClearance = 0.15f
     )
+    InstructionItem(instruction = mockInstruction)
 }

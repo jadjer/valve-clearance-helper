@@ -28,11 +28,11 @@ class MeasurementsViewModel(private val repository: ValveClearanceRepository) : 
 
     private fun loadMeasurements() {
         _measurements.clear()
-        _measurements.addAll(repository.measurements)
+        _measurements.addAll(repository.measurements.value)
     }
 }
 
-class MeasurementsViewModelFactory(private val repository: ValveClearanceRepositoryImpl) : ViewModelProvider.Factory {
+class MeasurementsViewModelFactory(private val repository: ValveClearanceRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MeasurementsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

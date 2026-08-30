@@ -1,6 +1,5 @@
 package by.jadjer.valveclearance.data.repository
 
-import android.hardware.usb.UsbDevice
 import by.jadjer.shimcalculator.ClearanceCalculator
 import by.jadjer.shimcalculator.models.Instruction
 import by.jadjer.shimcalculator.models.Shim
@@ -10,13 +9,14 @@ import by.jadjer.shimcalculator.models.ValveType
 import by.jadjer.valveclearance.domain.repository.ValveClearanceRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class ValveClearanceRepositoryImpl : ValveClearanceRepository {
-    private var _cylinders = MutableStateFlow<Int>(1)
-    private var _intakeValves = MutableStateFlow<Int>(1)
-    private var _exhaustValves = MutableStateFlow<Int>(1)
-    private var _measurements = MutableStateFlow<List<ValveMeasurement>>(emptyList())
-    private var _specification = MutableStateFlow<ValveSpecification>(ValveSpecification(intakeMin = 0f, intakeMax = 0f, exhaustMin = 0f, exhaustMax = 0f))
+    private val _cylinders = MutableStateFlow<Int>(1)
+    private val _intakeValves = MutableStateFlow<Int>(1)
+    private val _exhaustValves = MutableStateFlow<Int>(1)
+    private val _measurements = MutableStateFlow<List<ValveMeasurement>>(emptyList())
+    private val _specification = MutableStateFlow<ValveSpecification>(ValveSpecification(intakeMin = 0f, intakeMax = 0f, exhaustMin = 0f, exhaustMax = 0f))
 
     override val cylinders: StateFlow<Int> = _cylinders
     override val intakeValves: StateFlow<Int> = _intakeValves
@@ -28,12 +28,12 @@ class ValveClearanceRepositoryImpl : ValveClearanceRepository {
         val needsReset = _cylinders.value != cylinders ||
                 _intakeValves.value != intakeValves ||
                 _exhaustValves.value != exhaustValves ||
-                _measurements.isEmpty()
+                _measurements.value.isEmpty()
 
         if (needsReset) {
-            _cylinders = cylinders
-            _intakeValves = intakeValves
-            _exhaustValves = exhaustValves
+            _cylinders.value = cylinders
+            _intakeValves.value = intakeValves
+            _exhaustValves.value = exhaustValves
 
             resetMeasurements()
         }
@@ -45,28 +45,46 @@ class ValveClearanceRepositoryImpl : ValveClearanceRepository {
         exhaustMin: Float,
         exhaustMax: Float
     ) {
-        _specification = ValveSpecification(intakeMin, intakeMax, exhaustMin, exhaustMax)
+        _specification.value = ValveSpecification(intakeMin, intakeMax, exhaustMin, exhaustMax)
     }
 
     override fun updateMeasuredValue(valveNumber: Int, clearance: Float, shim: Float) {
-        _measurements.firstOrNull { it.valveNumber == valveNumber }?.let { measurement ->
-            measurement.clearance = clearance
-            measurement.shim.size = shim
+        _measurements.update { currentList ->
+            currentList.map { measurement ->
+                if (measurement.valveNumber == valveNumber) {
+                    measurement.copy(
+                        clearance = clearance,
+                        shim = measurement.shim.copy(size = shim)
+                    )
+                } else {
+                    measurement
+                }
+            }
         }
     }
 
     override fun getAdjustedValves(): List<Instruction> {
         val calculator = ClearanceCalculator()
-        val instructions = calculator.calculateSolutions(_measurements, _specification)
+        return calculator.calculateSolutions(_measurements.value, _specification.value)
+    }
 
-        return instructions
+    override fun reset() {
+        _cylinders.value = 1
+        _intakeValves.value = 1
+        _exhaustValves.value = 1
+        _measurements.value = emptyList()
+        _specification.value = ValveSpecification(0f, 0f, 0f, 0f)
     }
 
     private fun resetMeasurements() {
-        val intakeCount = cylinders * intakeValves
-        val exhaustCount = cylinders * exhaustValves
+        val currentCylinders = _cylinders.value
+        val currentIntake = _intakeValves.value
+        val currentExhaust = _exhaustValves.value
+        
+        val intakeCount = currentCylinders * currentIntake
+        val exhaustCount = currentCylinders * currentExhaust
 
-        _measurements = List(intakeCount + exhaustCount) { index ->
+        _measurements.value = List(intakeCount + exhaustCount) { index ->
             val number = index + 1
             val type = if (number <= intakeCount) ValveType.INTAKE else ValveType.EXHAUST
 

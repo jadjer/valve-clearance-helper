@@ -18,16 +18,22 @@ class ClearanceCalculator {
     }
 
     private fun validateInput(valveMeasurements: List<ValveMeasurement>, valveSpecification: ValveSpecification) {
-        require(valveMeasurements.isNotEmpty()) { throw ClearanceException("No measurements provided") }
+        if (valveMeasurements.isEmpty()) {
+            throw ClearanceException("No measurements provided")
+        }
 
         valveMeasurements.forEach { measurement ->
-            require(measurement.clearance > 0) { throw ClearanceException("Wrong clearance") }
-            require(measurement.shim.size > 0) { throw ClearanceException("Wrong shim size") }
+            if (measurement.clearance <= 0) throw ClearanceException("Wrong clearance for valve ${measurement.valveNumber}")
+            if (measurement.shim.size <= 0) throw ClearanceException("Wrong shim size for valve ${measurement.valveNumber}")
         }
 
         with(valveSpecification) {
-            require(intakeMin > 0 && intakeMax > 0 && intakeMin <= intakeMax) { throw ClearanceException("Wrong intake specification") }
-            require(exhaustMin > 0 && exhaustMax > 0 && exhaustMin <= exhaustMax) { throw ClearanceException("Wrong exhaust specification") }
+            if (intakeMin <= 0 || intakeMax <= 0 || intakeMin > intakeMax) {
+                throw ClearanceException("Wrong intake specification")
+            }
+            if (exhaustMin <= 0 || exhaustMax <= 0 || exhaustMin > exhaustMax) {
+                throw ClearanceException("Wrong exhaust specification")
+            }
         }
     }
 
