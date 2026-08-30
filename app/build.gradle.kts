@@ -6,9 +6,7 @@ plugins {
 
 android {
     namespace = "by.jadjer.valveclearance"
-    compileSdk {
-        version = release(37)
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "by.jadjer.valveclearance"

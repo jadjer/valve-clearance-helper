@@ -2,7 +2,7 @@ package by.jadjer.valveclearance.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import by.jadjer.valveclearance.data.local.dao.VehicleDao
+import by.jadjer.valveclearance.data.local.dao.VehicleDAO
 import by.jadjer.valveclearance.data.local.entity.VehicleEntity
 import by.jadjer.valveclearance.data.local.entity.MeasurementSessionEntity
 import by.jadjer.valveclearance.data.local.entity.ValveMeasurementEntity
@@ -17,5 +17,5 @@ import by.jadjer.valveclearance.data.local.entity.ValveMeasurementEntity
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun vehicleDao(): VehicleDao
+    abstract fun vehicleDao(): VehicleDAO
 }

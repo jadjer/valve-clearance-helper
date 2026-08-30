@@ -1,7 +1,7 @@
 package by.jadjer.valveclearance.data.repository
 
 import by.jadjer.shimcalculator.models.ValveMeasurement
-import by.jadjer.valveclearance.data.local.dao.VehicleDao
+import by.jadjer.valveclearance.data.local.dao.VehicleDAO
 import by.jadjer.valveclearance.data.local.entity.MeasurementSessionEntity
 import by.jadjer.valveclearance.data.mapper.toDomainModel
 import by.jadjer.valveclearance.data.mapper.toEntity
@@ -11,7 +11,7 @@ import by.jadjer.valveclearance.domain.repository.VehicleRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class VehicleRepositoryImpl(private val vehicleDao: VehicleDao) : VehicleRepository {
+class VehicleRepositoryImpl(private val vehicleDao: VehicleDAO) : VehicleRepository {
 
     override fun getAllVehicles(): Flow<List<Vehicle>> {
         return vehicleDao.getAllVehicles().map { entities ->

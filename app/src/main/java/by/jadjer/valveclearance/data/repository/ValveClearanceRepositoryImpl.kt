@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 class ValveClearanceRepositoryImpl : ValveClearanceRepository {
-    private val _cylinders = MutableStateFlow<Int>(1)
-    private val _intakeValves = MutableStateFlow<Int>(1)
-    private val _exhaustValves = MutableStateFlow<Int>(1)
+    private val _cylinders = MutableStateFlow(1)
+    private val _intakeValves = MutableStateFlow(1)
+    private val _exhaustValves = MutableStateFlow(1)
     private val _measurements = MutableStateFlow<List<ValveMeasurement>>(emptyList())
-    private val _specification = MutableStateFlow<ValveSpecification>(ValveSpecification(intakeMin = 0f, intakeMax = 0f, exhaustMin = 0f, exhaustMax = 0f))
+    private val _specification = MutableStateFlow(ValveSpecification(intakeMin = 0f, intakeMax = 0f, exhaustMin = 0f, exhaustMax = 0f))
 
     override val cylinders: StateFlow<Int> = _cylinders
     override val intakeValves: StateFlow<Int> = _intakeValves

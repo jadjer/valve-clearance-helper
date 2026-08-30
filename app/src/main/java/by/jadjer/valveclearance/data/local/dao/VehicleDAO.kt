@@ -7,7 +7,7 @@ import by.jadjer.valveclearance.data.local.entity.ValveMeasurementEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface VehicleDao {
+interface VehicleDAO {
     @Query("SELECT * FROM vehicles ORDER BY lastCheckTimestamp DESC")
     fun getAllVehicles(): Flow<List<VehicleEntity>>
 
